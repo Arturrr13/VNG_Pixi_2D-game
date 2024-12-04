@@ -1,0 +1,47 @@
+*, *::after, *::before{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    &:focus {
+        outline: none;
+    }
+}
+
+
+html, body{
+    font-size: 0.833vw; 
+    background: #403c32;
+    color: white;
+    @media screen and (max-height: 46vw) {
+        font-size: 1.48vh; // 1080px
+        .main__canvas{
+            max-width: em(1920);
+        }
+    }
+    // @media screen and (max-height: 150vw) {
+    //     font-size: 1.48vh; // 1080px
+    //     .main__canvas{
+    //         max-width: em(720);
+    //     }
+    // }
+}
+
+.body-wrap{
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.main__canvas{
+    width: 100%;
+    height: 100%;
+    //max-width: em(1920);
+    canvas{
+        z-index: 1;
+        width: 100%;
+        height: 100%;
+    }
+}
