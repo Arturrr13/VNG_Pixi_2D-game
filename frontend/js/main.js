@@ -38,8 +38,8 @@ render();
 let wdpr = window.devicePixelRatio || 1;
 
 let appSettings = {
-  debug: false, // это для вывода кнопок, консолей и алертов
-  xSprites: [], // это массив со всеми загруженными текстурами, для удобства вставки их на сцену
+  debug: false,
+  xSprites: [], 
   scale: 1,
   items:{}
 };
@@ -47,20 +47,18 @@ let appSettings = {
 const canvasPArrent = $$('.main__canvas')[0];
 
 let app = new PIXI.Application({
-	width: canvasPArrent.offsetWidth * wdpr,// * (window.devicePixelRatio || 1), 
-	height: canvasPArrent.offsetHeight * wdpr,// * (window.devicePixelRatio || 1),
-  // width: canvasPArrent.offsetWidth,// * (window.devicePixelRatio || 1), 
-	// height: canvasPArrent.offsetHeight,// * (window.devicePixelRatio || 1),
+	width: canvasPArrent.offsetWidth * wdpr,
+	height: canvasPArrent.offsetHeight * wdpr,
   backgroundAlpha: 0,
   transparent: true,
   eventMode: 'static'
-}); // создаем игровой канвас
+}); 
 
 
 globalThis.__PIXI_APP__ = app;
 
 
-canvasPArrent.appendChild(app.view); // вставляем наш игровой канвас в документ
+canvasPArrent.appendChild(app.view); 
 
 let step = 'floor', theme = '', progress = 0, skinsData = []
 
@@ -69,7 +67,7 @@ let viewportSize = {
     height: app.renderer.height,
 }
 
-//   \\\\!!!/// фция для запуска анимаций
+
 function playAnimBg(item,animation,repeat = false,callback){
   if(!item.spineData.findAnimation(animation)){
       console.warn(`not found animation "${animation}"`);
@@ -84,9 +82,7 @@ function playAnimBg(item,animation,repeat = false,callback){
       }
   }
 }
-//   ////!!!\\\\
 
-//   \\\\!!!/// фция для смены скинов
 function setSkin(item,skin){
   if(!item.spineData.findSkin(skin)){
       console.warn(`not found skin "${skin}"`);
@@ -99,7 +95,7 @@ function setSkin(item,skin){
   const index = skinsData.findIndex(el => el.name === item.name)
   index > -1 ? skinsData[index].skin = skin : skinsData.push({name: item.name, skin: skin})
 }
-// ////!!!\\\\
+
 function findKeyInObj(obj,key){
   return obj.hasOwnProperty(key)
 }
@@ -115,21 +111,21 @@ function addSpineItem(item){
         callback(myBaseTexture);
     });
     
-    const atlasAttachmentLoader = new PIXI.spine.AtlasAttachmentLoader(skeletonArray);//создаем объект по текстуре
+    const atlasAttachmentLoader = new PIXI.spine.AtlasAttachmentLoader(skeletonArray);
 
-    const spineJsonParser = new PIXI.spine.SkeletonJson(atlasAttachmentLoader);//создаем скелет
+    const spineJsonParser = new PIXI.spine.SkeletonJson(atlasAttachmentLoader);
     
     const spineData = spineJsonParser.readSkeletonData(element.skeleton);
     
 
-    return new PIXI.spine.Spine(spineData);// добавляем текстуру в обект с текстурами items
+    return new PIXI.spine.Spine(spineData);
 }else{
-    return new PIXI.spine.Spine(appSettings.xSprites[item].spineData); // создаем объект с анимацией
+    return new PIXI.spine.Spine(appSettings.xSprites[item].spineData); 
 }
 }
 
 function addItem(item,visible = true){
-  const returnItem = addSpineItem(item) // создаем объект с анимацией
+  const returnItem = addSpineItem(item) 
   if(!returnItem) return false
   returnItem.visible = false
   returnItem.eventMode = "static"
@@ -196,23 +192,23 @@ function addItem(item,visible = true){
     returnItem.on('pointerout', mouseOut)
   }
 
-  app.stage.addChild(returnItem); // добавляем его на сцену
+  app.stage.addChild(returnItem); 
 
-  returnItem.scale.set(appSettings.scale);// уменьшаем (нужно для того чтоб все элементы уменьшались на одинаковый коеффициент)
+  returnItem.scale.set(appSettings.scale);
 
   returnItem.position.set(viewportSize.width/2,viewportSize.height/2);// центрируем по середине сцены
 
-  if(appSettings.debug){ // отобразить кнопки управления, нужно для того, чтоб проще было понять какая анимация за что отвечает
+  if(appSettings.debug){ 
     const div = document.createElement('div');
-    const buttons = $$('#buttons')[0]; // куда вставлять
+    const buttons = $$('#buttons')[0]; 
     buttons.appendChild(div);
-    //   \\\\!!!//// вставляем заголовок с названием объекта
+    
     const head = document.createElement('h2');
     head.innerHTML = item;
     div.appendChild(head);
-    //   ////!!!\\\\
     
-    //   \\\\!!!//// вставляем список всех анимаций
+    
+    
     const headAnimations = document.createElement('h4');
     headAnimations.innerHTML = 'Animation list';
     div.appendChild(headAnimations);
@@ -221,14 +217,14 @@ function addItem(item,visible = true){
         const button = document.createElement('button');
         button.innerHTML = el.name;
         button.addEventListener('click',e=>{
-            playAnimBg(returnItem,el.name,true) // запуск анимации
+            playAnimBg(returnItem,el.name,true) 
         })
         div.appendChild(button);
     });
-    //   ////!!!\\\\
     
     
-    //   \\\\!!!//// вставляем список всех анимаций
+    
+    
     const headSkins = document.createElement('h4');
     headSkins.innerHTML = 'Skins list';
     div.appendChild(headSkins);
@@ -239,32 +235,32 @@ function addItem(item,visible = true){
         button.addEventListener('click',e=>{
             
             returnItem.skeleton.setSkin(null);
-            returnItem.skeleton.setSkinByName(el.name);// смена скина
+            returnItem.skeleton.setSkinByName(el.name);
             returnItem.skeleton.setSlotsToSetupPose();
         })
         div.appendChild(button);
     });
     //   ////!!!\\\\
     
-    const hr = document.createElement('hr'); // просто разделитель
+    const hr = document.createElement('hr'); 
     div.appendChild(hr);
 }
   requestAnimationFrame(() => {
     returnItem.visible = visible;
   })
   returnItem.name = item;
-  return returnItem; // возвращаем созданый элемент, для записи в переменную например
+  return returnItem; 
 }
 
 
 let texturesPromise = PIXI.Assets.load([]);
 
 
-texturesPromise.then(onAssetsLoaded) // после загрузки всех файлов
+texturesPromise.then(onAssetsLoaded) 
 
-function onAssetsLoaded(textures) { // после загрузки всех элементов
+function onAssetsLoaded(textures) { 
   if(textures){
-      appSettings.xSprites = textures; // записываем всё загруженное в переменную, для простого обращения к ним
+      appSettings.xSprites = textures; 
   }
   
   $$('#buttons button',el=>{
@@ -349,7 +345,7 @@ function prepareMainGame() {
   })
 }
 
-//   \\\\!!!/// фция для воспроизведения звуков
+
 function searchSound(sound){
   if(!PIXI.sound.exists(sound)){
       console.warn(`not found sound "${sound}"`)
@@ -358,7 +354,7 @@ function searchSound(sound){
   return PIXI.sound.find(sound)
 }
 // ////!!!\\\\
-//   \\\\!!!/// фция для воспроизведения звуков
+
 function playSound(sound){
   const s = searchSound(sound)
   if(sound === 'bg'){
